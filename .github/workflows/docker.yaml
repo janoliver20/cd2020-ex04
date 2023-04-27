@@ -45,13 +45,15 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Get short Git hash
-        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: |
+          echo "GIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo $GIT_SHA
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: janoliver20/my-first-image:$SHORT_SHA
+          images: janoliver20/my-first-image:$GIT_SHA
 
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
@@ -64,7 +66,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/janoliver20/my-first-image:$SHORT_SHA'
+          image-ref: 'docker.io/janoliver20/my-first-image:$GIT_SHA'
           format: 'github'
           exit-code: '1'
           ignore-unfixed: true
