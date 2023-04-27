@@ -40,7 +40,7 @@ jobs:
         with:
           images: janoliver20/my-first-image
           tags: |
-            type=sha,format:short
+            type=sha,format=short,prefix=
 
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
